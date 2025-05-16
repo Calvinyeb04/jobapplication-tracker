@@ -6,7 +6,7 @@ import { AuthUser, getCurrentUser } from '@/lib/auth';
 interface AuthContextType {
   user: AuthUser | null;
   isLoading: boolean;
-  login: (userId: string) => void;
+  login: (userId: string) => Promise<boolean>;
   logout: () => void;
 }
 
@@ -47,9 +47,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
   
-  const login = (userId: string) => {
+  const login = async (userId: string) => {
     localStorage.setItem('userId', userId);
-    loadUser(userId);
+    await loadUser(userId);
+    return true;
   };
   
   const logout = () => {

@@ -18,7 +18,7 @@ const signUpSchema = z.object({
 
 type SignUpForm = z.infer<typeof signUpSchema>;
 
-export default function SignUpForm({ onSuccess }: { onSuccess: () => void }) {
+export default function SignUpForm({ onSuccess }: { onSuccess: (userId: string) => void }) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
@@ -31,8 +31,8 @@ export default function SignUpForm({ onSuccess }: { onSuccess: () => void }) {
     setError(null);
     
     try {
-      await signUp(data.email, data.password, data.name);
-      onSuccess();
+      const user = await signUp(data.email, data.password, data.name);
+      onSuccess(user.id);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {

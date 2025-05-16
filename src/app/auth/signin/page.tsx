@@ -2,33 +2,38 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import SignInForm from '@/components/auth/SignInForm';
 import { useAuth } from '@/context/AuthContext';
 
 export default function SignIn() {
   const router = useRouter();
   const { login, user, isLoading } = useAuth();
+  const [isRedirecting, setIsRedirecting] = useState(false);
   
   useEffect(() => {
     // Only redirect if we're not loading and we have a user
-    if (!isLoading && user) {
-      router.push('/dashboard');
+    if (!isLoading && user && !isRedirecting) {
+      router.replace('/dashboard');
     }
-  }, [user, isLoading, router]);
+  }, [user, isLoading, router, isRedirecting]);
   
-  const handleSuccess = (userId: string) => {
-    // Update authentication state
-    login(userId);
-    
-    // Wait briefly to allow the state to update before redirecting
-    setTimeout(() => {
-      router.push('/dashboard');
-    }, 500);
+  const handleSuccess = async (userId: string) => {
+    try {
+      setIsRedirecting(true);
+      // Update authentication state and wait for it to complete
+      await login(userId);
+      
+      // Use window.location for a full page refresh to break any potential loops
+      window.location.href = '/dashboard';
+    } catch (error) {
+      console.error('Authentication error:', error);
+      setIsRedirecting(false);
+    }
   };
   
-  // If we're loading or already have a user, show loading state
-  if (isLoading || user) {
+  // If we're loading, already have a user, or are in the process of redirecting, show loading state
+  if (isLoading || user || isRedirecting) {
     return <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-blue-100">
       <div className="bg-white p-8 rounded-lg shadow-md">
         <div className="text-center">Loading...</div>

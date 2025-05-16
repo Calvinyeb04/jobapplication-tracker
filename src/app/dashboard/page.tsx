@@ -32,8 +32,9 @@ export default function Dashboard() {
   const [isAppLoading, setIsAppLoading] = useState(true);
   
   useEffect(() => {
+    // Only redirect if we're not in the loading state and we know the user is not authenticated
     if (!isLoading && !user) {
-      router.push('/auth/signin');
+      router.replace('/auth/signin');
       return;
     }
     
