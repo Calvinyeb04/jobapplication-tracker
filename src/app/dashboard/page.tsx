@@ -34,10 +34,9 @@ export default function Dashboard() {
   useEffect(() => {
     if (!isLoading && !user) {
       router.push('/auth/signin');
+      return;
     }
-  }, [isLoading, user, router]);
-  
-  useEffect(() => {
+    
     if (user) {
       const fetchData = async () => {
         try {
@@ -65,10 +64,14 @@ export default function Dashboard() {
       
       fetchData();
     }
-  }, [user]);
+  }, [isLoading, user, router]);
   
-  if (isLoading || !user) {
+  if (isLoading) {
     return <div className="text-center py-10">Loading...</div>;
+  }
+  
+  if (!user) {
+    return <div className="text-center py-10">Redirecting to login...</div>;
   }
   
   return (

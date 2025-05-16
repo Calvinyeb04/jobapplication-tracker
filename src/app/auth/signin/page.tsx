@@ -11,16 +11,30 @@ export default function SignIn() {
   const { login, user, isLoading } = useAuth();
   
   useEffect(() => {
-    // If user is already logged in, redirect to dashboard
-    if (user && !isLoading) {
+    // Only redirect if we're not loading and we have a user
+    if (!isLoading && user) {
       router.push('/dashboard');
     }
   }, [user, isLoading, router]);
   
   const handleSuccess = (userId: string) => {
+    // Update authentication state
     login(userId);
-    router.push('/dashboard');
+    
+    // Wait briefly to allow the state to update before redirecting
+    setTimeout(() => {
+      router.push('/dashboard');
+    }, 500);
   };
+  
+  // If we're loading or already have a user, show loading state
+  if (isLoading || user) {
+    return <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-blue-100">
+      <div className="bg-white p-8 rounded-lg shadow-md">
+        <div className="text-center">Loading...</div>
+      </div>
+    </div>;
+  }
   
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-blue-100 py-12 px-4 sm:px-6 lg:px-8">
