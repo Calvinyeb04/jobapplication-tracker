@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# JobTracker - Job Application Tracking System
+
+JobTracker is a modern web application that helps job seekers organize their job search process. Keep track of job applications, interviews, and progress all in one place with a beautiful, intuitive interface.
+
+
+## Features
+
+- **User Authentication**: Secure sign-up and login functionality
+- **Dashboard Overview**: Get a quick glimpse of your job search journey with recent applications and upcoming interviews
+- **Application Tracking**: Log and monitor all your job applications in one place
+- **Interview Management**: Keep track of scheduled interviews and their details
+- **Status Updates**: Update application statuses as you progress through the hiring process
+- **Responsive Design**: Works seamlessly on desktop and mobile devices
+
+## Technologies Used
+
+- **Frontend**: Next.js, React, Tailwind CSS
+- **Backend**: Next.js API routes
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: Custom auth implementation with Supabase
+- **Styling**: Tailwind CSS
+- **Form Handling**: React Hook Form with Zod validation
+- **Date Handling**: date-fns
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js (v14 or later)
+- npm or yarn
+- Supabase account for database
+
+### Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/jobapplication-tracker.git
+   cd jobapplication-tracker
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. Set up environment variables:
+   Create a `.env.local` file in the root directory with the following variables:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
+
+4. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+
+## Usage
+
+1. **Sign Up**: Create a new account using your email
+2. **Sign In**: Log in with your credentials
+3. **Dashboard**: View your recent applications and upcoming interviews
+4. **Add Application**: Track a new job application
+5. **Manage Interviews**: Add and update interview information
+6. **Update Status**: Change application status as you progress through the hiring process
+
+## Database Schema
+
+The application uses the following main tables:
+
+- **users**: User authentication and profile information
+- **applications**: Job application details
+- **interviews**: Interview scheduling and information
+
+## Deployment
+
+The application can be deployed to platforms like Vercel, Netlify, or any other service that supports Next.js applications.
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Build for production
+npm run build
+
+# Start the production server
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Roadmap
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [ ] Email notifications for upcoming interviews
+- [ ] Customizable application statuses
+- [ ] Job search analytics and insights
+- [ ] Resume/CV management
+- [ ] Integration with job boards
+- [ ] Dark mode
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Contributing
 
-## Learn More
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-To learn more about Next.js, take a look at the following resources:
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Deploy on Vercel
+## Acknowledgments
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- All the libraries and frameworks used in this project
+- Inspiration from other job tracking applications
+- Feedback from users and contributors
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+Made with ❤️ for job seekers everywhere
