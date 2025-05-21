@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { createOrUpdateDailyChallenge } from './dailyChallenges';
 
 export type Application = {
   id: string;
@@ -29,6 +30,14 @@ export async function createApplication(applicationData: ApplicationInput) {
   
   if (error) {
     throw new Error(error.message);
+  }
+  
+  // Update daily challenge count
+  try {
+    await createOrUpdateDailyChallenge(applicationData.user_id);
+  } catch (challengeError) {
+    console.error('Error updating daily challenge:', challengeError);
+    // Don't throw here - we still want to return the application even if challenge update fails
   }
   
   return data[0] as Application;
