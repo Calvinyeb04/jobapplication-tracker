@@ -14,6 +14,7 @@ const applicationSchema = z.object({
   job_link: z.string().url('Please enter a valid URL').optional().or(z.literal('')),
   date_applied: z.string().min(1, 'Application date is required'),
   status: z.enum(['Applied', 'Interview', 'Offer', 'Rejected']),
+  category: z.enum(['Fall', 'Spring', 'Summer', 'Winter', 'General']).optional(),
   tags: z.string().optional(),
   notes: z.string().optional(),
   hiring_manager_name: z.string().optional(),
@@ -49,6 +50,7 @@ export default function ApplicationForm({ initialData, onSuccess, onCancel }: Ap
     : {
         status: 'Applied',
         date_applied: format(new Date(), 'yyyy-MM-dd'),
+        category: 'General',
       };
   
   const { register, handleSubmit, formState: { errors } } = useForm<ApplicationFormValues>({
@@ -69,24 +71,23 @@ export default function ApplicationForm({ initialData, onSuccess, onCancel }: Ap
       
       // Handle empty job link
       const jobLink = data.job_link === '' ? undefined : data.job_link;
-      
+      const applicationPayload = {
+        ...data,
+        job_link: jobLink,
+        tags: tagsArray,
+        connections: connectionsArray,
+        category: data.category || 'General',
+      };
+
       if (isEditMode && initialData) {
         // Update existing application
-        const updatedApplication = await updateApplication(initialData.id, {
-          ...data,
-          job_link: jobLink,
-          tags: tagsArray,
-          connections: connectionsArray,
-        });
+        const updatedApplication = await updateApplication(initialData.id, applicationPayload);
         onSuccess(updatedApplication);
       } else {
         // Create new application
         const applicationData: ApplicationInput = {
-          ...data,
+          ...applicationPayload,
           user_id: user.id,
-          job_link: jobLink,
-          tags: tagsArray,
-          connections: connectionsArray,
         };
         
         const newApplication = await createApplication(applicationData);
@@ -179,6 +180,26 @@ export default function ApplicationForm({ initialData, onSuccess, onCancel }: Ap
             </select>
             {errors.status && (
               <p className="mt-1 text-sm text-red-600">{errors.status.message}</p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+              Category
+            </label>
+            <select
+              id="category"
+              {...register('category')}
+              className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring-blue-500"
+            >
+              <option value="General">General</option>
+              <option value="Fall">Fall</option>
+              <option value="Spring">Spring</option>
+              <option value="Summer">Summer</option>
+              <option value="Winter">Winter</option>
+            </select>
+            {errors.category && (
+              <p className="mt-1 text-sm text-red-600">{errors.category.message}</p>
             )}
           </div>
           

@@ -8,6 +8,7 @@ export type Application = {
   job_link?: string;
   date_applied: string;
   status: 'Applied' | 'Interview' | 'Offer' | 'Rejected';
+  category?: 'Fall' | 'Spring' | 'Summer' | 'Winter' | 'General';
   tags?: string[];
   notes?: string;
   created_at: string;
@@ -21,6 +22,9 @@ export type Application = {
 export type ApplicationInput = Omit<Application, 'id' | 'created_at'> & {
   user_id: string;
 };
+
+export type SortKey = 'company' | 'role' | 'date_applied' | 'status';
+export type SortOrder = 'asc' | 'desc';
 
 export async function createApplication(applicationData: ApplicationInput) {
   const { data, error } = await supabase
@@ -43,12 +47,16 @@ export async function createApplication(applicationData: ApplicationInput) {
   return data[0] as Application;
 }
 
-export async function getUserApplications(userId: string) {
+export async function getUserApplications(
+  userId: string,
+  sortKey: SortKey = 'date_applied',
+  sortOrder: SortOrder = 'desc'
+) {
   const { data, error } = await supabase
     .from('applications')
     .select('*')
     .eq('user_id', userId)
-    .order('date_applied', { ascending: false });
+    .order(sortKey, { ascending: sortOrder === 'asc' });
   
   if (error) {
     throw new Error(error.message);
@@ -95,5 +103,18 @@ export async function deleteApplication(id: string) {
     throw new Error(error.message);
   }
   
+  return true;
+}
+
+export async function deleteAllApplications(userId: string) {
+  const { error } = await supabase
+    .from('applications')
+    .delete()
+    .eq('user_id', userId);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
   return true;
 } 
